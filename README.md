@@ -47,6 +47,34 @@ npm install
 ```bash
 ng serve
 ```
+---
+## Funcionalidades
+---
+### Soma
+![Tela inicial](./imagens/animacao_soma.gif)
+
+---
+### Subtração
+![Tela inicial](./imagens/animacao_subtracao.gif)
+
+---
+### Identificar multiplo de 3
+![Tela inicial](./imagens/animacao_multi3.gif)
+
+---
+### Identificar linguagem Regular
+![Tela inicial](./imagens/animacao_regular.gif)
+
+---
+### Identificar linguagem Sensível
+![Tela inicial](./imagens/animacao_senivel.gif)
+
+---
+### Identificar Palindromo
+![Tela inicial](./imagens/animacao_palindromo.gif)
+
+---
+
 
 
 
