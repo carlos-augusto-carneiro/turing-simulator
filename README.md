@@ -5,6 +5,10 @@ Ele permite visualizar a fita, movimentação da cabeça de leitura, execução 
 
 ---
 
+![Tela inicial](./imagens/pagina_inicial.png)
+
+---
+
 ## 🚀 Funcionalidades
 
 - Visualização da fita da Máquina de Turing com animação.
@@ -43,6 +47,7 @@ npm install
 ```bash
 ng serve
 ```
+
 
 
 
