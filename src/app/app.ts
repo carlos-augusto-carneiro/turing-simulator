@@ -1,12 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { TapeVisualizer } from './components/tape-visualizer/tape-visualizer';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [TapeVisualizer],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('turing-simulator');
 }
