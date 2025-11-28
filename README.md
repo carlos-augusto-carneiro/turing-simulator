@@ -1,6 +1,6 @@
-# 🧠 Simulador de Máquina de Turing
+# Simulador de Máquina de Turing
 
-Este projeto é um simulador gráfico de Máquina de Turing desenvolvido em **Angular** e estilizado com **TailwindCSS**.  
+Este projeto é um simulador gráfico de Máquina de Turing desenvolvido em **Angular** e estilizado com **TailwindCSS** para cadeira de Teoria da computação.  
 Ele permite visualizar a fita, movimentação da cabeça de leitura, execução passo a passo e execução automática com ajuste de velocidade.
 
 ---
@@ -9,7 +9,7 @@ Ele permite visualizar a fita, movimentação da cabeça de leitura, execução 
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - Visualização da fita da Máquina de Turing com animação.
 - Exibição da posição atual da cabeça de leitura.
@@ -29,7 +29,7 @@ Ele permite visualizar a fita, movimentação da cabeça de leitura, execução 
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Angular 17+**
 - **TailwindCSS**
@@ -39,7 +39,7 @@ Ele permite visualizar a fita, movimentação da cabeça de leitura, execução 
 
 ---
 
-## ▶️ Como Executar
+## Como Executar
 
 ```bash
 npm install
