@@ -19,9 +19,11 @@ export class TapeVisualizer implements OnInit {
   resultMessage: string | null = null;
   velocidadeMs: number = 300;
   inputVelocidade: boolean = false;
+  inputAlgoritmo: boolean = false;
+  algoritmoTexto: string = '';
   sliderValue: number = 50;
 
-  activeMachine: 'default' | 'soma' | 'subtracao' | 'sensivel' | 'regular' | 'multi3' | 'palindromo' = 'default' ;
+  activeMachine: 'default' | 'soma' | 'subtracao' | 'sensivel' | 'regular' | 'multi3' | 'palindromo' | 'custom' = 'default' ;
   constructor(public tmService: TuringMachine,
               private calculatorService: CalculatorService,
               private NgZone: NgZone,
@@ -161,7 +163,7 @@ export class TapeVisualizer implements OnInit {
 
   private checkResult(): void {
     const isFinal = this.tmService.currentState?.getIsFinal() || false;
-    const maquinasComResultado = ['soma', 'subtracao', 'sensivel', 'regular', 'multi3', 'palindromo'];
+    const maquinasComResultado = ['soma', 'subtracao', 'sensivel', 'regular', 'multi3', 'palindromo', 'custom'];
 
     if (maquinasComResultado.includes(this.activeMachine) && this.tmService.currentState?.getIsFinal()) {
       this.resultMessage = this.calculatorService.extractResult(this.tmService.tape, isFinal, this.activeMachine);
@@ -176,7 +178,7 @@ export class TapeVisualizer implements OnInit {
 
     this.NgZone.run(() => {
       const isFinal = this.tmService.currentState?.getIsFinal() || false;
-      const maquinasComResultado = ['soma', 'subtracao', 'sensivel', 'regular', 'multi3', 'palindromo'];
+      const maquinasComResultado = ['soma', 'subtracao', 'sensivel', 'regular', 'multi3', 'palindromo', 'custom'];
       if (maquinasComResultado.includes(this.activeMachine) && this.tmService.currentState?.getIsFinal()) {
         this.resultMessage = this.calculatorService.extractResult(this.tmService.tape, isFinal, this.activeMachine);
         this.cdr.detectChanges();
@@ -235,5 +237,86 @@ export class TapeVisualizer implements OnInit {
 
 
     this.tmService.initialize(q0, w, 20);
+  }
+  carregarAlgoritmoPersonalizado(): void {
+    this.stop();
+    this.activeMachine = 'custom';
+    this.resultMessage = null;
+
+    if (!this.algoritmoTexto || this.algoritmoTexto.trim() === '') {
+      alert('Por favor, digite o algoritmo na caixa de texto.');
+      return;
+    }
+
+    const linhas = this.algoritmoTexto.split('\n');
+    const estados = new Map<string, State>();
+
+    const getState = (name: string): State => {
+      const n = name.trim();
+      if (!estados.has(n)) {
+        estados.set(n, new State(n, false));
+      }
+      return estados.get(n)!;
+    };
+
+    let estadoInicial: State | null = null;
+    let fitaInicial: string = '';
+
+    try {
+      for (const linha of linhas) {
+        const l = linha.trim();
+        if (!l || l.startsWith('#') || l.startsWith('//') || l.startsWith('@')) continue;
+
+        if (l.toLowerCase().startsWith('fita ')) {
+          fitaInicial = l.substring(5).trim();
+          continue;
+        }
+
+        if (l.toLowerCase().startsWith('init ')) {
+          const nome = l.split(/\s+/)[1];
+          if (nome) estadoInicial = getState(nome);
+          continue;
+        }
+
+        if (l.toLowerCase().startsWith('accept ')) {
+          const nome = l.split(/\s+/)[1];
+          if (nome) getState(nome).setFinal(true);
+          continue;
+        }
+
+        const partes = l.split(',');
+        if (partes.length >= 5) {
+          const qAtual = getState(partes[0]);
+          const ler = partes[1].trim();
+          const qProx = getState(partes[2]);
+          const escrever = partes[3].trim();
+          let dir = partes[4].trim().toUpperCase();
+
+          if (dir === '>' || dir === 'R') dir = 'D';
+          if (dir === '<' || dir === 'L') dir = 'E';
+
+          qAtual.addTransition(qProx, ler, escrever, dir);
+
+          if (!estadoInicial) estadoInicial = qAtual;
+        }
+      }
+
+      if (estadoInicial) {
+        const input = fitaInicial || '10110';
+
+        const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+        if (inputElement) inputElement.value = input;
+
+        this.tmService.initialize(estadoInicial, input, 20);
+        this.inputAlgoritmo = false; // Fecha a caixa
+        console.log('Algoritmo carregado com sucesso! Fita:', input);
+      } else {
+        alert('Erro: Não foi possível identificar o estado inicial (init).');
+      }
+
+    } catch (e) {
+      console.error(e);
+      alert('Erro ao processar o algoritmo. Verifique a sintaxe.');
+    }
   }
 }
